@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\webapi.Health-Clinic_Tarde.props" />
+</Project>

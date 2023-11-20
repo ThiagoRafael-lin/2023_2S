@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>webapi.Health-Clinic_Tarde</name>
+    </assembly>
+    <members>
+        <member name="T:webapi.Health_Clinic_Tarde.Migrations.BDInitialize">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.Health_Clinic_Tarde.Migrations.BDInitialize.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.Health_Clinic_Tarde.Migrations.BDInitialize.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.Health_Clinic_Tarde.Migrations.BDInitialize.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:webapi.Health_Clinic_Tarde.Migrations.HorarioAlteradoParaTime">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.Health_Clinic_Tarde.Migrations.HorarioAlteradoParaTime.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.Health_Clinic_Tarde.Migrations.HorarioAlteradoParaTime.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.Health_Clinic_Tarde.Migrations.HorarioAlteradoParaTime.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:webapi.Health_Clinic_Tarde.Migrations.AgoraVai">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.Health_Clinic_Tarde.Migrations.AgoraVai.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.Health_Clinic_Tarde.Migrations.AgoraVai.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:webapi.Health_Clinic_Tarde.Migrations.AgoraVai.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

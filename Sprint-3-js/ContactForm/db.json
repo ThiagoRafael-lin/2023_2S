@@ -1,0 +1,23 @@
+{
+    "contatos": [
+      {
+        "id": 1,
+        "nome": "thiago",
+        "sobrenome": "rafael",
+        "email": "thiagorafael2005@gmail.com",
+        "telefone": {
+          "pais": "55",
+          "ddd": "11",
+          "telefone": "980734391"
+        },
+          "cep": "03978370",
+          "rua": "rua dos ninhos",
+          "numero": "50",
+          "complemento": "conjunto jau",
+          "bairro": "São Paulo",
+          "cidade": "São Paulo",
+          "UF": "São Paulo",
+         "anotacoes": "Tristreza"
+      }
+    ]
+  }

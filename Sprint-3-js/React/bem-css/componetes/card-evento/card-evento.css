@@ -1,0 +1,46 @@
+.bloco {
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.card {
+    border: 3px solid #b51d44;
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.card__titulo {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    margin: 30px;
+}
+
+.card__texto {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 17px;
+    margin-top: 60px;
+
+}
+
+.card__conect {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    margin-top: 30px;
+    border: none;
+    background-color: transparent;
+    color: #b51d44;
+    font-size: 20px;
+}
+
+.card__conect:hover {
+    color: black;
+}
+
+.card__conect--disabled:hover {
+    color: black;
+    cursor: not-allowed;
+}
