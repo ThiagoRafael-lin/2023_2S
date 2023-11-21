@@ -4,6 +4,7 @@ import "./TipoEventosPage.css";
 import MainContent from "../../Components/MainContent/MainContent";
 import ImageIllustrator from "../../Components/ImageIllustrator/ImageIllustrator";
 
+import "../../Components/FormComponents/FormComponents"
 import eventTypeImage from "../../assets/images/tipo-evento.svg";
 import Container from "../../Components/Container/Container";
 import { Input, Button } from "../../Components/FormComponents/FormComponents";
@@ -24,21 +25,48 @@ const TipoEventosPage = () => {
 
   const [tipoEventos, setTipoEventos] = useState([]); //array
 
+//***********************UseEffect *************************/
 
-  // **********************Notify**********************
+useEffect(() => {
+  async function getTiposEvento() {
 
-  setNotifyUser({
-    titleNote: "Sucesso",
-    textNote: `Cadastrado com sucesso!`,
-    imgIcon: "success",
-    imgAlt:
-      "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
-    showMessage: true,
-  });
+    setShowSpinner(true);
+
+    try {
+      const promise = await api.get("/TiposEvento");
+      console.log(promise.data);
+      setTipoEventos(promise.data);
+    } catch (error) {
+
+      setNotifyUser({
+        titleNote: "Atenção",
+        textNote: `Deu ruim na api`,
+        imgIcon: "danger",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      });
+    }
+
+    setShowSpinner(false);
+  }
+  getTiposEvento();
+  console.log("A home foi montada!");
+}, []);
+
+  // **********************getState**********************
+
+  async function getState()
+  {
+    const retornoGet = await api.get("/TiposEvento");
+    console.log(retornoGet.data);
+    setTipoEventos(retornoGet.data)
+  }
 
   //  *************************EDITAR*****************************
 
   async function handleSubmit(e) {
+    //para o submit da página
     e.preventDefault();
 
     if (titulo.trim().length < 3) {
@@ -46,63 +74,83 @@ const TipoEventosPage = () => {
       return;
     }
     try {
-      const retorno = await api.post("/TiposEvento", { titulo: titulo });
+      const retorno = await api.post("/TiposEvento", { titulo: titulo }); //{titulo:titulo} para {titulo} quando o valor da propriedade tiver o mesmo nome pode ser usado uma vez apenas
 
-      console.log("Cadastrado com sucesso");
+      setNotifyUser({
+        titleNote: "Sucesso",
+        textNote: `Cadastrado com sucesso!`,
+        imgIcon: "success",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      }); 
+
       console.log(retorno.data);
-
       setTitulo("");
-      const retornoGet = await api.get("/TiposEvento");
-
-      setTipoEventos(retornoGet.data);
-    } catch (error) {
-      console.log("Deu ruim na api");
-      console.log(error);
+      getState();
+    } catch (e) {
+    
+      setNotifyUser({
+        titleNote: "Atenção",
+        textNote: `Erro ao cadastrar`,
+        imgIcon: "danger",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      });
     }
+  }
+
+   //********************EdicActionAbort *********************/
+
+   function editActionAbort() {
+    setFrmEdit(false);
+    setTitulo=("");
+    setIdEvento(null);
   }
 
   //********************Update *********************/
 
   async function handleUpdate(e) {
+    //para o submit da página
     e.preventDefault();
+
     try {
       
       const retorno = await api.put('/TiposEvento/' + idEvento, {
         titulo: titulo
       });
 
-      const retornoGet = await api.get('/TiposEvento');
-      setTipoEventos(retornoGet.data);
-      alert("Atualizado com sucesso");
+      setNotifyUser({
+        titleNote: "Sucesso",
+        textNote: `Atualizado com sucesso!`,
+        imgIcon: "success",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      });
+
+      setTitulo("")
+      getState();
 
       editActionAbort();
 
     } catch (error) {
       
-      alert("Problemas na atualização. Tente novamente")
-
+      setNotifyUser({
+        titleNote: "Atenção",
+        textNote: `Falha na atualização`,
+        imgIcon: "danger",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      });
     }
   }
 
-  //********************Delete *********************/
+   //********************ShowUpdateForm *********************/
 
-  async function handleDelete(idEvento) {
-    try {
-      const retorno = await api.delete(`/TiposEvento/${idEvento}`);
-
-      alert("Registro apagado com sucesso");
-
-      const retornoGet = await api.get("/TiposEvento");
-
-      setTipoEventos(retornoGet.data);
-    } catch (error) {
-      console.log("Erro ao excluir");
-    }
-  }
-
-  //********************ShowUpdateForm *********************/
-
-  async function showUpdateForm(idElemento) {
+   async function showUpdateForm(idElemento) {
     setFrmEdit(true);
 
     try {
@@ -119,28 +167,35 @@ const TipoEventosPage = () => {
 
   }
 
-  //********************EdicActionAbort *********************/
+  //********************Delete *********************/
 
-  function editActionAbort() {
-    alert("Cancelar a tela de edição de dados");
-    setFrmEdit(false);
-    setTitulo=("");
-    setIdEvento(null);
-  }
+  async function handleDelete(idEvento) {
+    try {
+      const retorno = await api.delete(`/TiposEvento/${idEvento}`);
 
-  //***********************UseEffect *************************/
+      setNotifyUser({
+        titleNote: "Sucesso",
+        textNote: `Apagado com sucesso!`,
+        imgIcon: "success",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      }); 
 
-  useEffect(() => {
-    async function getTiposEvento() {
-      try {
-        const promise = await api.get("/TiposEvento");
-        setTipoEventos(promise.data);
-      } catch (error) {
-        alert(`Deu ruim na api ${error})`)
-      }
+      getState();
+
+    } catch (error) {
+
+      setNotifyUser({
+        titleNote: "Atenção",
+        textNote: `Erro ao tentar apagar`,
+        imgIcon: "danger",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      });
     }
-    getTiposEvento();
-  }, []);
+  }
 
   //***********************Return ***************************/
 
