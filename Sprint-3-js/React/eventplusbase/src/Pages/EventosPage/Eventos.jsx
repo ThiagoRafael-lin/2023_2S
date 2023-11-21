@@ -18,11 +18,17 @@ const Eventos = () => {
   const [notifyUser, setNotifyUser] = useState({});
   const [showSpinner, setShowSpinner] = useState(true);
 
+  const [nome, setNome] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [data, setData] = useState();
+
+  const [evento, setEvento] = useState([]);
+
   const [frmEdit, setFrmEdit] = useState(false);
 
   const [titulo, setTitulo] = useState("");
   const [idEvento, setIdEvento] = useState(null);
-  
+
   const [tipoEventos, setTipoEventos] = useState([]);
 
   //************************useEffect ******************************/
@@ -135,62 +141,62 @@ const Eventos = () => {
   }
 
   //************************ShowUpdateForm ******************************/
-  
-  async function showUpdateForm(idElemento){
-      setFrmEdit(true);
-      try {
-          const retorno = await api.get("/Evento" + idElemento)
-          
-          setTitulo(retorno.data.titulo);
-        setIdEvento(retorno.data.idTipoEvento);
-        
-    } catch (error) {
-        
-        alert("Não foi possivel mostrar a tela de edição. tente novamente")
-        
-    }
-}
 
-//************************Delete ******************************/
-
-async function handleDelete(idEvento) {
+  async function showUpdateForm(idElemento) {
+    setFrmEdit(true);
     try {
-        const retorno = await api.delete(`/Evento/${idEvento}`);
+      const retorno = await api.get("/Evento" + idElemento)
 
-        setNotifyUser({
-            titleNote: "Sucesso",
-            textNote: `Apagado com sucesso!`,
-            imgIcon: "success",
-            imgAlt:
-              "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
-            showMessage: true,
-          }); 
-
-          getState();
+      setTitulo(retorno.data.titulo);
+      setIdEvento(retorno.data.idTipoEvento);
 
     } catch (error) {
-        
-        setNotifyUser({
-            titleNote: "Atenção",
-            textNote: `Erro ao tentar apagar`,
-            imgIcon: "danger",
-            imgAlt:
-              "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
-            showMessage: true,
-          });
+
+      alert("Não foi possivel mostrar a tela de edição. tente novamente")
 
     }
-}
+  }
 
-  
+  //************************Delete ******************************/
+
+  async function handleDelete(idEvento) {
+    try {
+      const retorno = await api.delete(`/Evento/${idEvento}`);
+
+      setNotifyUser({
+        titleNote: "Sucesso",
+        textNote: `Apagado com sucesso!`,
+        imgIcon: "success",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      });
+
+      getState();
+
+    } catch (error) {
+
+      setNotifyUser({
+        titleNote: "Atenção",
+        textNote: `Erro ao tentar apagar`,
+        imgIcon: "danger",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      });
+
+    }
+  }
+
+
   //************************Return ******************************/
 
   return (
     <MainContent>
-        <Notification {...notifyUser} setNotifyUser={setNotifyUser} />
-        { showSpinner ? <Spinner /> : null}
+      <Notification {...notifyUser} setNotifyUser={setNotifyUser} />
+      {showSpinner ? <Spinner /> : null}
 
-        <Spinner />
+      <Spinner />
 
       <section className="cadastro-evento-section">
         <Container>
@@ -204,57 +210,58 @@ async function handleDelete(idEvento) {
 
             <form
               className="ftipo-evento"
-              onSubmit={frmEdit ? handleUpdate : handleSubmit}
             >
               <>
                 <Input
                   type={"text"}
-                  id={"titulo"}
-                  name={"titulo"}
+                  id={"nome"}
+                  name={"nome"}
                   placeholder={"Nome"}
                   required={"required"}
-                  value={titulo}
+                  value={nome}
                   manipulationFunction={(e) => {
-                    setTitulo(e.target.value);
+                    setNome(e.target.value);
                   }}
                 />
+
                 <Input
                   type={"text"}
-                  id={"titulo"}
-                  name={"titulo"}
+                  id={"descrição"}
+                  name={"descrição"}
                   placeholder={"Descrição"}
                   required={"required"}
-                  value={titulo}
+                  value={descricao}
                   manipulationFunction={(e) => {
-                    setTitulo(e.target.value);
+                    setDescricao(e.target.value);
                   }}
                 />
+
+                <select
+                  name=""
+                  id="">
+                  <option
+                    value="Evento"
+                  >
+                    Tipo Evento
+                  </option>
+                </select>
+
                 <Input
-                  type={"text"}
-                  id={"titulo"}
-                  name={"titulo"}
-                  placeholder={"Tipo Evento"}
-                  required={"required"}
-                  value={titulo}
-                  manipulationFunction={(e) => {
-                    setTitulo(e.target.value);
-                  }}
-                />
-                <Input
-                  type={"text"}
-                  id={"titulo"}
-                  name={"titulo"}
+                  type={"data"}
+                  id={"data"}
+                  name={"data"}
                   placeholder={"dd / mm / aaaa"}
                   required={"required"}
-                  value={titulo}
+                  value={data}
                   manipulationFunction={(e) => {
-                    setTitulo(e.target.value);
+                    setData(e.target.value);
                   }}
                 />
+
                 <Button
                   type={"submit"}
-                  id={"Cadastrar"}
-                  name={"Cadastrar"}
+                  id={"botao"}
+                  name={"botao"}
                   textButton={"Cadastrar"}
                 />
               </>
@@ -266,10 +273,8 @@ async function handleDelete(idEvento) {
         <Container>
           <Title titleText={"Lista de Evento"} color="white" />
           <TableEv
-            dados={tipoEventos}
-            fnUpdate={(e) => {
-              showUpdateForm(e.target.value);
-            }}
+            dados={evento}
+            fnUpdate={handleUpdate}        
             fnDelete={handleDelete}
           />
         </Container>
