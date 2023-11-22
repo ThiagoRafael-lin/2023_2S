@@ -246,7 +246,7 @@ useEffect(() => {
                     id={"titulo"}
                     placeholder={"Título"}
                     name={"titulo"}
-                    types={"text"}
+                    type={"text"}
                     required="required"
                     value={titulo}
                     manipulationFunction={(e) => {
