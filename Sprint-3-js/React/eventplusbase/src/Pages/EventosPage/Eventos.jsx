@@ -18,9 +18,10 @@ const Eventos = () => {
   const [notifyUser, setNotifyUser] = useState({});
   const [showSpinner, setShowSpinner] = useState(true);
 
-  const [nome, setNome] = useState("");
+  const [nomeEvento, setNomeEvento] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [data, setData] = useState();
+  const [dataEvento, setDataEvento] = useState();
+  const [idTipoEvento, setIdTipoEvento] = useState();
 
   const [evento, setEvento] = useState([]);
 
@@ -34,8 +35,8 @@ const Eventos = () => {
     async function getEventos() {
       try {
         const promise = await api.get("/Evento");
-        console.log(promise.data);
-        setEvento(promise.data);
+        console.log(promise.dataEvento);
+        setEvento(promise.dataEvento);
       } catch (error) {
         setNotifyUser({
           titleNote: "Atenção",
@@ -55,8 +56,8 @@ const Eventos = () => {
 
   async function getState() {
     const retornoGet = await api.get("/Evento");
-    console.log(retornoGet.data);
-    setEvento(retornoGet.data);
+    console.log(retornoGet.dataEvento);
+    setEvento(retornoGet.dataEvento);
   }
 
   //************************Submit ******************************/
@@ -65,25 +66,38 @@ const Eventos = () => {
     //para o submit da pagina
     e.preventDefault();
 
-    if (nome.trim().length < 3) {
-      alert("O nome deve ter no minimo 3 caracteres");
+    if (nomeEvento.trim().length < 3) {
+
+      setNotifyUser({
+        titleNote: "Erro",
+        textNote: `O titulo deve conter no minimo 3 caracteres!`,
+        imgIcon: "danger",
+        imgAlt:
+        "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      });
       return;
     }
+    
     try {
-      const retorno = await api.post("/Evento", { nome : nome});
+      const retorno = await api.post("/Evento", { 
 
+        nomeEvento : nomeEvento,
+        descricao : descricao,
+        dataEvento : dataEvento,
+        idTipoEvento : idTipoEvento
+      });
+      
       setNotifyUser({
         titleNote: "Sucesso",
         textNote: `Cadastrado com sucesso!`,
         imgIcon: "success",
         imgAlt:
-          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
         showMessage: true,
       });
 
-      console.log(retorno.data);
-      setNome("");
-      getState();
+
     } catch (e) {
       setNotifyUser({
         titleNote: "Atenção",
@@ -95,12 +109,47 @@ const Eventos = () => {
       });
     }
   }
+  
+  // async function handleSubmit(e) {
+  //   //para o submit da pagina
+  //   e.preventDefault();
+
+  //   if (nome.trim().length < 3) {
+  //     alert("O nome deve ter no minimo 3 caracteres");
+  //     return;
+  //   }
+  //   try {
+  //     const retorno = await api.post("/Evento", { nome : nome});
+
+  //     setNotifyUser({
+  //       titleNote: "Sucesso",
+  //       textNote: `Cadastrado com sucesso!`,
+  //       imgIcon: "success",
+  //       imgAlt:
+  //         "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+  //       showMessage: true,
+  //     });
+
+  //     console.log(retorno.data);
+  //     setNome("");
+  //     getState();
+  //   } catch (e) {
+  //     setNotifyUser({
+  //       titleNote: "Atenção",
+  //       textNote: `Erro ao cadastrar`,
+  //       imgIcon: "danger",
+  //       imgAlt:
+  //         "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+  //       showMessage: true,
+  //     });
+  //   }
+  // }
 
   //************************EdictAbort ******************************/
 
   function editActionAbort() {
     setFrmEdit(false);
-    setNome = "";
+    setNomeEvento = "";
     setIdEvento(null);
   }
 
@@ -108,13 +157,20 @@ const Eventos = () => {
 
   async function handleUpdate(e) {
     //parar o submit da página
-    // e.preventDefault();
+    e.preventDefault();
 
     try {
       const retorno = await api.put("/Evento" + idEvento, {
-        nome: nome
+        nomeEvento: nomeEvento,
+        descricao : descricao,
+        dataEvento : dataEvento,
+        idTipoEvento : idTipoEvento
       });
-      console.log(retorno.data);
+
+      const retornoGet = await api.get("/Evento")
+      setEvento(retornoGet.data)
+      
+      console.log(retorno.dataEvento);
 
       setNotifyUser({
         titleNote: "Sucesso",
@@ -125,10 +181,8 @@ const Eventos = () => {
         showMessage: true,
       });
 
-      setNome("");
-      getState();
-
       editActionAbort();
+      
     } catch (e) {
       setNotifyUser({
         titleNote: "Atenção",
@@ -140,7 +194,41 @@ const Eventos = () => {
       });
     }
   }
+  
+  // async function handleUpdate(e) {
+  //   //parar o submit da página
+  //   // e.preventDefault();
 
+  //   try {
+  //     const retorno = await api.put("/Evento" + idEvento, {
+  //       nomeEvento: nomeEvento
+  //     });
+  //     console.log(retorno.dataEvento);
+
+  //     setNotifyUser({
+  //       titleNote: "Sucesso",
+  //       textNote: `Atualizado com sucesso!`,
+  //       imgIcon: "success",
+  //       imgAlt:
+  //         "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+  //       showMessage: true,
+  //     });
+
+  //     setNomeEvento("");
+  //     getState();
+
+  //     editActionAbort();
+  //   } catch (e) {
+  //     setNotifyUser({
+  //       titleNote: "Atenção",
+  //       textNote: `Erro ao cadastrar`,
+  //       imgIcon: "danger",
+  //       imgAlt:
+  //         "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+  //       showMessage: true,
+  //     });
+  //   }
+  // }
   //************************ShowUpdateForm ******************************/
 
   async function showUpdateForm(idElemento) {
@@ -148,8 +236,8 @@ const Eventos = () => {
     try {
       const retorno = await api.get("/Evento/" + idElemento)
 
-      setNome(retorno.data.nome);
-      setIdEvento(retorno.data.idTipoEvento);
+      setNomeEvento(retorno.dataEvento.nomeEvento);
+      setIdEvento(retorno.dataEvento.idTipoEvento);
 
     } catch (error) {
 
@@ -222,9 +310,9 @@ const Eventos = () => {
                   name={"nome"}
                   placeholder={"Nome"}
                   required={"required"}
-                  value={nome}
+                  value={nomeEvento}
                   manipulationFunction={(e) => {
-                    setNome(e.target.value);
+                    setNomeEvento(e.target.value);
                   }}
                 />
 
@@ -256,9 +344,9 @@ const Eventos = () => {
                   name={"data"}
                   placeholder={"dd / mm / aaaa"}
                   required={"required"}
-                  value={data}
+                  value={dataEvento}
                   manipulationFunction={(e) => {
-                    setData(e.target.value);
+                    setDataEvento(e.target.value);
                   }}
                 />
 
@@ -278,9 +366,9 @@ const Eventos = () => {
                   name={"nome"}
                   placeholder={"Nome"}
                   required={"required"}
-                  value={nome}
+                  value={nomeEvento}
                   manipulationFunction={(e) => {
-                    setNome(e.target.value);
+                    setNomeEvento(e.target.value);
                   }}
                 />
 
@@ -312,9 +400,9 @@ const Eventos = () => {
                   name={"data"}
                   placeholder={"dd / mm / aaaa"}
                   required={"required"}
-                  value={data}
+                  value={dataEvento}
                   manipulationFunction={(e) => {
-                    setData(e.target.value);
+                    setDataEvento(e.target.value);
                   }}
                 />
                 <div className="buttonsp-editbox">
