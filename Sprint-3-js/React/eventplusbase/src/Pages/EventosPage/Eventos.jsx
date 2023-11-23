@@ -247,7 +247,7 @@ const Eventos = () => {
                 </select>
 
                 <Input
-                  type={"data"}
+                  type={"date"}
                   id={"data"}
                   name={"data"}
                   placeholder={"dd / mm / aaaa"}
