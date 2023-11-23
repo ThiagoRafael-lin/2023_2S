@@ -35,7 +35,7 @@ const TableEv = ({ dados, fnUpdate, fnDelete }) => {
 
       <tbody>
 
-        {dados?.map((Ev) => {
+        {dados.map((Ev) => {
           return (
 
             <tr className="table-data__head-row">

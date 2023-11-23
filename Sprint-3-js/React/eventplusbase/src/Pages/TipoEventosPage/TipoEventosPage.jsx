@@ -4,7 +4,7 @@ import "./TipoEventosPage.css";
 import MainContent from "../../Components/MainContent/MainContent";
 import ImageIllustrator from "../../Components/ImageIllustrator/ImageIllustrator";
 
-import "../../Components/FormComponents/FormComponents"
+import "../../Components/FormComponents/FormComponents";
 import eventTypeImage from "../../assets/images/tipo-evento.svg";
 import Container from "../../Components/Container/Container";
 import { Input, Button } from "../../Components/FormComponents/FormComponents";
@@ -12,7 +12,7 @@ import api from "../../Services/Services";
 import TableTp from "./TableTp/TableTp";
 
 import Notification from "../../Components/Notification/Notification";
-import Spinner from  "../../Components/Spinner/Spinner";
+import Spinner from "../../Components/Spinner/Spinner";
 
 const TipoEventosPage = () => {
   const [notifyUser, setNotifyUser] = useState({});
@@ -25,42 +25,39 @@ const TipoEventosPage = () => {
 
   const [tipoEventos, setTipoEventos] = useState([]); //array
 
-//***********************UseEffect *************************/
+  //***********************UseEffect *************************/
 
-useEffect(() => {
-  async function getTiposEvento() {
+  useEffect(() => {
+    async function getTiposEvento() {
+      setShowSpinner(true);
 
-    setShowSpinner(true);
+      try {
+        const promise = await api.get("/TiposEvento");
+        console.log(promise.data);
+        setTipoEventos(promise.data);
+      } catch (error) {
+        setNotifyUser({
+          titleNote: "Atenção",
+          textNote: `Deu ruim na api`,
+          imgIcon: "danger",
+          imgAlt:
+            "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+          showMessage: true,
+        });
+      }
 
-    try {
-      const promise = await api.get("/TiposEvento");
-      console.log(promise.data);
-      setTipoEventos(promise.data);
-    } catch (error) {
-
-      setNotifyUser({
-        titleNote: "Atenção",
-        textNote: `Deu ruim na api`,
-        imgIcon: "danger",
-        imgAlt:
-          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
-        showMessage: true,
-      });
+      setShowSpinner(false);
     }
-
-    setShowSpinner(false);
-  }
-  getTiposEvento();
-  console.log("A home foi montada!");
-}, []);
+    getTiposEvento();
+    console.log("A home foi montada!");
+  }, []);
 
   // **********************getState**********************
 
-  async function getState()
-  {
+  async function getState() {
     const retornoGet = await api.get("/TiposEvento");
     console.log(retornoGet.data);
-    setTipoEventos(retornoGet.data)
+    setTipoEventos(retornoGet.data);
   }
 
   //  *************************EDITAR*****************************
@@ -83,13 +80,12 @@ useEffect(() => {
         imgAlt:
           "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
         showMessage: true,
-      }); 
+      });
 
       console.log(retorno.data);
       setTitulo("");
       getState();
     } catch (e) {
-    
       setNotifyUser({
         titleNote: "Atenção",
         textNote: `Erro ao cadastrar`,
@@ -101,11 +97,11 @@ useEffect(() => {
     }
   }
 
-   //********************EdicActionAbort *********************/
+  //********************EdicActionAbort *********************/
 
-   function editActionAbort() {
+  function editActionAbort() {
     setFrmEdit(false);
-    setTitulo=("");
+    setTitulo = "";
     setIdEvento(null);
   }
 
@@ -116,9 +112,8 @@ useEffect(() => {
     e.preventDefault();
 
     try {
-      
-      const retorno = await api.put('/TiposEvento/' + idEvento, {
-        titulo: titulo
+      const retorno = await api.put("/TiposEvento/" + idEvento, {
+        titulo: titulo,
       });
 
       setNotifyUser({
@@ -130,13 +125,11 @@ useEffect(() => {
         showMessage: true,
       });
 
-      setTitulo("")
+      setTitulo("");
       getState();
 
       editActionAbort();
-
     } catch (error) {
-      
       setNotifyUser({
         titleNote: "Atenção",
         textNote: `Falha na atualização`,
@@ -148,23 +141,19 @@ useEffect(() => {
     }
   }
 
-   //********************ShowUpdateForm *********************/
+  //********************ShowUpdateForm *********************/
 
-   async function showUpdateForm(idElemento) {
+  async function showUpdateForm(idElemento) {
     setFrmEdit(true);
 
     try {
-      const retorno = await api.get("/TiposEvento" + idElemento)
+      const retorno = await api.get("/TiposEvento" + idElemento);
 
       setTitulo(retorno.data.titulo);
       setIdEvento(retorno.data.idTipoEvento);
-
     } catch (error) {
-
-      alert("Não foi possivel mostrar a tela de edição. tente novamente"); 
-
+      alert("Não foi possivel mostrar a tela de edição. tente novamente");
     }
-
   }
 
   //********************Delete *********************/
@@ -180,12 +169,10 @@ useEffect(() => {
         imgAlt:
           "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
         showMessage: true,
-      }); 
+      });
 
       getState();
-
     } catch (error) {
-
       setNotifyUser({
         titleNote: "Atenção",
         textNote: `Erro ao tentar apagar`,
@@ -202,7 +189,7 @@ useEffect(() => {
   return (
     <MainContent>
       <Notification {...notifyUser} setNotifyUser={setNotifyUser} />
-      { showSpinner  ?  <Spinner /> : null}
+      {showSpinner ? <Spinner /> : null}
 
       <Spinner />
       {/* Cadastro tipo de eventos */}
@@ -284,9 +271,7 @@ useEffect(() => {
 
           <TableTp
             dados={tipoEventos}
-            fnUpdate={(e) => {
-              showUpdateForm(e.target.value);
-            }}
+            fnUpdate={showUpdateForm}
             fnDelete={handleDelete}
           />
         </Container>

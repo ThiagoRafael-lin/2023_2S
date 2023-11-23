@@ -26,10 +26,8 @@ const Eventos = () => {
 
   const [frmEdit, setFrmEdit] = useState(false);
 
-  const [titulo, setTitulo] = useState("");
   const [idEvento, setIdEvento] = useState(null);
 
-  const [tipoEventos, setTipoEventos] = useState([]);
 
   //************************useEffect ******************************/
   useEffect(() => {
@@ -37,7 +35,7 @@ const Eventos = () => {
       try {
         const promise = await api.get("/Evento");
         console.log(promise.data);
-        setTipoEventos(promise.data);
+        setEvento(promise.data);
       } catch (error) {
         setNotifyUser({
           titleNote: "Atenção",
@@ -58,7 +56,7 @@ const Eventos = () => {
   async function getState() {
     const retornoGet = await api.get("/Evento");
     console.log(retornoGet.data);
-    setTipoEventos(retornoGet.data);
+    setEvento(retornoGet.data);
   }
 
   //************************Submit ******************************/
@@ -67,12 +65,12 @@ const Eventos = () => {
     //para o submit da pagina
     e.preventDefault();
 
-    if (titulo.trim().length < 3) {
-      alert("O titulo deve ter no minimo 3 caracteres");
+    if (nome.trim().length < 3) {
+      alert("O nome deve ter no minimo 3 caracteres");
       return;
     }
     try {
-      const retorno = await api.post("/Evento", { titulo });
+      const retorno = await api.post("/Evento", { nome : nome});
 
       setNotifyUser({
         titleNote: "Sucesso",
@@ -84,7 +82,7 @@ const Eventos = () => {
       });
 
       console.log(retorno.data);
-      setTitulo("");
+      setNome("");
       getState();
     } catch (e) {
       setNotifyUser({
@@ -102,7 +100,7 @@ const Eventos = () => {
 
   function editActionAbort() {
     setFrmEdit(false);
-    setTitulo = "";
+    setNome = "";
     setIdEvento(null);
   }
 
@@ -110,12 +108,13 @@ const Eventos = () => {
 
   async function handleUpdate(e) {
     //parar o submit da página
-    e.preventDefault();
+    // e.preventDefault();
 
     try {
       const retorno = await api.put("/Evento" + idEvento, {
-        titulo: titulo,
+        nome: nome
       });
+      console.log(retorno.data);
 
       setNotifyUser({
         titleNote: "Sucesso",
@@ -126,8 +125,10 @@ const Eventos = () => {
         showMessage: true,
       });
 
-      setTitulo("");
+      setNome("");
       getState();
+
+      editActionAbort();
     } catch (e) {
       setNotifyUser({
         titleNote: "Atenção",
@@ -145,9 +146,9 @@ const Eventos = () => {
   async function showUpdateForm(idElemento) {
     setFrmEdit(true);
     try {
-      const retorno = await api.get("/Evento" + idElemento)
+      const retorno = await api.get("/Evento/" + idElemento)
 
-      setTitulo(retorno.data.titulo);
+      setNome(retorno.data.nome);
       setIdEvento(retorno.data.idTipoEvento);
 
     } catch (error) {
@@ -210,7 +211,10 @@ const Eventos = () => {
 
             <form
               className="ftipo-evento"
+              onSubmit={frmEdit ? handleUpdate : handleSubmit}
             >
+             {!frmEdit ? (
+
               <>
                 <Input
                   type={"text"}
@@ -265,6 +269,75 @@ const Eventos = () => {
                   textButton={"Cadastrar"}
                 />
               </>
+             ) : (
+              <>
+              
+              <Input
+                  type={"text"}
+                  id={"nome"}
+                  name={"nome"}
+                  placeholder={"Nome"}
+                  required={"required"}
+                  value={nome}
+                  manipulationFunction={(e) => {
+                    setNome(e.target.value);
+                  }}
+                />
+
+                <Input
+                  type={"text"}
+                  id={"descrição"}
+                  name={"descrição"}
+                  placeholder={"Descrição"}
+                  required={"required"}
+                  value={descricao}
+                  manipulationFunction={(e) => {
+                    setDescricao(e.target.value);
+                  }}
+                />
+
+                <select
+                  name=""
+                  id="">
+                  <option
+                    value="Evento"
+                  >
+                    Tipo Evento
+                  </option>
+                </select>
+
+                <Input
+                  type={"date"}
+                  id={"data"}
+                  name={"data"}
+                  placeholder={"dd / mm / aaaa"}
+                  required={"required"}
+                  value={data}
+                  manipulationFunction={(e) => {
+                    setData(e.target.value);
+                  }}
+                />
+                <div className="buttonsp-editbox">
+
+                <Button
+                  type={"submit"}
+                  id={"atualizar"}
+                  name={"atualizar"}
+                  textButton={"atualizar"}
+                  manipulationFunction={handleUpdate}
+                />
+                <Button
+                  type={"button"}
+                  id={"cancelar"}
+                  name={"cancelar"}
+                  textButton={"cancelar"}
+                  manipulationFunction={editActionAbort}
+                />
+                </div>
+
+              </>
+             )}
+
             </form>
           </div>
         </Container>
@@ -274,7 +347,7 @@ const Eventos = () => {
           <Title titleText={"Lista de Evento"} color="white" />
           <TableEv
             dados={evento}
-            fnUpdate={handleUpdate}        
+            fnUpdate={showUpdateForm} 
             fnDelete={handleDelete}
           />
         </Container>
