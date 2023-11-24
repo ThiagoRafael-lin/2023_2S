@@ -191,7 +191,6 @@ const TipoEventosPage = () => {
       <Notification {...notifyUser} setNotifyUser={setNotifyUser} />
       {showSpinner ? <Spinner /> : null}
 
-      <Spinner />
       {/* Cadastro tipo de eventos */}
       <section className="cadastro-evento-section">
         <Container>

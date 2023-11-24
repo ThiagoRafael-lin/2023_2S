@@ -3,7 +3,7 @@ import "./TableEv.css";
 
 import editPen from "../../../assets/images/edit-pen.svg";
 import trashDelete from "../../../assets/images/trash-delete.svg";
-
+import { Tooltip } from 'react-tooltip';
 
 const TableEv = ({ dados, fnUpdate, fnDelete }) => {
   console.log(dados);
@@ -45,7 +45,16 @@ const TableEv = ({ dados, fnUpdate, fnDelete }) => {
               </td>
 
               <td className="table-data__data table-data__data--little">
-                {Ev.descricao}
+                <p
+                data-tooltip-id={Ev.idEvento}
+                data-tooltip-content={Ev.descricao}
+                data-tooltip-place="top"
+                >
+                <Tooltip id={Ev.idEvento} className="tootip" />
+                {Ev.descricao.substr(0, 15)}...
+                </p>
+                
+
               </td>
 
               <td className="table-data__data table-data__data--little">
