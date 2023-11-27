@@ -23,9 +23,14 @@ const Eventos = () => {
   const [notifyUser, setNotifyUser] = useState({});
   const [showSpinner, setShowSpinner] = useState(false);
 
-  const [nome, setNome] = useState("");
+  const [nomeEvento, setNomeEvento] = useState("");
   const [descricao, setDescricao] = useState("");
+<<<<<<< HEAD
   const [data, setData] = useState("");
+=======
+  const [dataEvento, setDataEvento] = useState();
+  const [idTipoEvento, setIdTipoEvento] = useState();
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
 
   const [eventos, setEventos] = useState([]);
 
@@ -45,7 +50,12 @@ const Eventos = () => {
       setShowSpinner(true);
       try {
         const promise = await api.get("/Evento");
+<<<<<<< HEAD
         setEventos(promise.data);
+=======
+        console.log(promise.dataEvento);
+        setEvento(promise.dataEvento);
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
       } catch (error) {
         setNotifyUser({
           titleNote: "Erro",
@@ -123,8 +133,13 @@ const Eventos = () => {
 
   async function getState() {
     const retornoGet = await api.get("/Evento");
+<<<<<<< HEAD
     console.log(retornoGet.data);
     setEventos(retornoGet.data);
+=======
+    console.log(retornoGet.dataEvento);
+    setEvento(retornoGet.dataEvento);
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
   }
 
   //************************Submit ******************************/
@@ -133,11 +148,21 @@ const Eventos = () => {
     //para o submit da pagina
     e.preventDefault();
 
-    if (nome.trim().length < 3) {
-      alert("O nome deve ter no minimo 3 caracteres");
+    if (nomeEvento.trim().length < 3) {
+
+      setNotifyUser({
+        titleNote: "Erro",
+        textNote: `O titulo deve conter no minimo 3 caracteres!`,
+        imgIcon: "danger",
+        imgAlt:
+        "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        showMessage: true,
+      });
       return;
     }
+    
     try {
+<<<<<<< HEAD
       const retorno = await api.post("/Evento", {
         nomeEvento: nome,
         descricao: descricao,
@@ -145,19 +170,26 @@ const Eventos = () => {
         idTipoEvento: idTipoEvento,
         idInstituicao: idInstituicao
       });
+=======
+      const retorno = await api.post("/Evento", { 
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
 
+        nomeEvento : nomeEvento,
+        descricao : descricao,
+        dataEvento : dataEvento,
+        idTipoEvento : idTipoEvento
+      });
+      
       setNotifyUser({
         titleNote: "Sucesso",
         textNote: `Cadastrado com sucesso!`,
         imgIcon: "success",
         imgAlt:
-          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+        "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
         showMessage: true,
       });
 
-      console.log(retorno.data);
-      setNome("");
-      getState();
+
     } catch (e) {
       setNotifyUser({
         titleNote: "Atenção",
@@ -169,15 +201,54 @@ const Eventos = () => {
       });
     }
   }
+  
+  // async function handleSubmit(e) {
+  //   //para o submit da pagina
+  //   e.preventDefault();
+
+  //   if (nome.trim().length < 3) {
+  //     alert("O nome deve ter no minimo 3 caracteres");
+  //     return;
+  //   }
+  //   try {
+  //     const retorno = await api.post("/Evento", { nome : nome});
+
+  //     setNotifyUser({
+  //       titleNote: "Sucesso",
+  //       textNote: `Cadastrado com sucesso!`,
+  //       imgIcon: "success",
+  //       imgAlt:
+  //         "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+  //       showMessage: true,
+  //     });
+
+  //     console.log(retorno.data);
+  //     setNome("");
+  //     getState();
+  //   } catch (e) {
+  //     setNotifyUser({
+  //       titleNote: "Atenção",
+  //       textNote: `Erro ao cadastrar`,
+  //       imgIcon: "danger",
+  //       imgAlt:
+  //         "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+  //       showMessage: true,
+  //     });
+  //   }
+  // }
 
   //************************EdictAbort ******************************/
 
   function editActionAbort() {
     setFrmEdit(false);
+<<<<<<< HEAD
     setNome("");
     setData("");
     setDescricao("");
     setIdTipoEvento("");
+=======
+    setNomeEvento = "";
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
     setIdEvento(null);
   }
 
@@ -185,6 +256,7 @@ const Eventos = () => {
 
   async function handleUpdate(e) {
     //parar o submit da página
+<<<<<<< HEAD
      e.preventDefault();
 
     try {
@@ -196,6 +268,23 @@ const Eventos = () => {
         idInstituicao: idInstituicao
       });
       
+=======
+    e.preventDefault();
+
+    try {
+      const retorno = await api.put("/Evento" + idEvento, {
+        nomeEvento: nomeEvento,
+        descricao : descricao,
+        dataEvento : dataEvento,
+        idTipoEvento : idTipoEvento
+      });
+
+      const retornoGet = await api.get("/Evento")
+      setEvento(retornoGet.data)
+      
+      console.log(retorno.dataEvento);
+
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
       setNotifyUser({
         titleNote: "Sucesso",
         textNote: `Atualizado com sucesso!`,
@@ -204,12 +293,18 @@ const Eventos = () => {
         "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
         showMessage: true,
       });
+<<<<<<< HEAD
       console.log(retorno.data);
 
       editActionAbort();
       getState();
 
       // editActionAbort();
+=======
+
+      editActionAbort();
+      
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
     } catch (e) {
       setNotifyUser({
         titleNote: "Atenção",
@@ -221,7 +316,41 @@ const Eventos = () => {
       });
     }
   }
+  
+  // async function handleUpdate(e) {
+  //   //parar o submit da página
+  //   // e.preventDefault();
 
+  //   try {
+  //     const retorno = await api.put("/Evento" + idEvento, {
+  //       nomeEvento: nomeEvento
+  //     });
+  //     console.log(retorno.dataEvento);
+
+  //     setNotifyUser({
+  //       titleNote: "Sucesso",
+  //       textNote: `Atualizado com sucesso!`,
+  //       imgIcon: "success",
+  //       imgAlt:
+  //         "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+  //       showMessage: true,
+  //     });
+
+  //     setNomeEvento("");
+  //     getState();
+
+  //     editActionAbort();
+  //   } catch (e) {
+  //     setNotifyUser({
+  //       titleNote: "Atenção",
+  //       textNote: `Erro ao cadastrar`,
+  //       imgIcon: "danger",
+  //       imgAlt:
+  //         "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.",
+  //       showMessage: true,
+  //     });
+  //   }
+  // }
   //************************ShowUpdateForm ******************************/
 
   async function showUpdateForm(idElemento) {
@@ -229,11 +358,16 @@ const Eventos = () => {
     try {
       const retorno = await api.get("/Evento/" + idElemento);
 
+<<<<<<< HEAD
       setNome(retorno.data.nomeEvento);
       setDescricao(retorno.data.descricao);
       setIdTipoEvento(retorno.data.idTiposEvento)
       setData(dateFormatDdToViewR(retorno.data.dataEvento));
       setIdEvento(retorno.data.idEvento)
+=======
+      setNomeEvento(retorno.dataEvento.nomeEvento);
+      setIdEvento(retorno.dataEvento.idTipoEvento);
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
 
       setIdTipoEvento(retorno.data.idTipoEvento);
     } catch (error) {
@@ -304,6 +438,7 @@ const Eventos = () => {
                     }}
                   />
 
+<<<<<<< HEAD
                   <Input
                     type={"text"}
                     id={"descrição"}
@@ -315,6 +450,20 @@ const Eventos = () => {
                       setDescricao(e.target.value);
                     }}
                   />
+=======
+              <>
+                <Input
+                  type={"text"}
+                  id={"nome"}
+                  name={"nome"}
+                  placeholder={"Nome"}
+                  required={"required"}
+                  value={nomeEvento}
+                  manipulationFunction={(e) => {
+                    setNomeEvento(e.target.value);
+                  }}
+                />
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
 
                   <Select
                     id={"tipoEvento"}
@@ -339,6 +488,7 @@ const Eventos = () => {
                     }}
                   />
 
+<<<<<<< HEAD
                   <Button
                     type={"submit"}
                     id={"botao"}
@@ -382,6 +532,95 @@ const Eventos = () => {
                     }}
                     defaultvalue={idTipoEvento}
                   />
+=======
+                <Input
+                  type={"date"}
+                  id={"data"}
+                  name={"data"}
+                  placeholder={"dd / mm / aaaa"}
+                  required={"required"}
+                  value={dataEvento}
+                  manipulationFunction={(e) => {
+                    setDataEvento(e.target.value);
+                  }}
+                />
+
+                <Button
+                  type={"submit"}
+                  id={"botao"}
+                  name={"botao"}
+                  textButton={"Cadastrar"}
+                />
+              </>
+             ) : (
+              <>
+              
+              <Input
+                  type={"text"}
+                  id={"nome"}
+                  name={"nome"}
+                  placeholder={"Nome"}
+                  required={"required"}
+                  value={nomeEvento}
+                  manipulationFunction={(e) => {
+                    setNomeEvento(e.target.value);
+                  }}
+                />
+
+                <Input
+                  type={"text"}
+                  id={"descrição"}
+                  name={"descrição"}
+                  placeholder={"Descrição"}
+                  required={"required"}
+                  value={descricao}
+                  manipulationFunction={(e) => {
+                    setDescricao(e.target.value);
+                  }}
+                />
+
+                <select
+                  name=""
+                  id="">
+                  <option
+                    value="Evento"
+                  >
+                    Tipo Evento
+                  </option>
+                </select>
+
+                <Input
+                  type={"date"}
+                  id={"data"}
+                  name={"data"}
+                  placeholder={"dd / mm / aaaa"}
+                  required={"required"}
+                  value={dataEvento}
+                  manipulationFunction={(e) => {
+                    setDataEvento(e.target.value);
+                  }}
+                />
+                <div className="buttonsp-editbox">
+
+                <Button
+                  type={"submit"}
+                  id={"atualizar"}
+                  name={"atualizar"}
+                  textButton={"atualizar"}
+                  manipulationFunction={handleUpdate}
+                />
+                <Button
+                  type={"button"}
+                  id={"cancelar"}
+                  name={"cancelar"}
+                  textButton={"cancelar"}
+                  manipulationFunction={editActionAbort}
+                />
+                </div>
+
+              </>
+             )}
+>>>>>>> b90c40df64147a7ff0096f2456d984b132d02362
 
                   <Input
                     type={"date"}
