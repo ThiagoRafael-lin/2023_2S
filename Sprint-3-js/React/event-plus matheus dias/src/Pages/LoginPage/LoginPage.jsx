@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ImageIllustrator from "../../Components/ImageIllustrator/ImageIllustrator";
 import logo from "../../Assets/images/logo-pink.svg";
 import { Input, Button } from "../../Components/FormComponents/FormComponents";
@@ -7,12 +7,18 @@ import "./LoginPage.css";
 import loginImage from "../../Assets/images/login.svg";
 import api from "../../Services/Service";
 import { UserContext, UserDecodeToken } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [user, setUser] = useState({ email: "", senha: "" });
-//dados globais do usuario
+  //dados globais do usuario
 
-  const {userData, setUserData} = useContext (UserContext)
+  const { userData, setUserData } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userData.name) navigate("/")
+  }, [userData])
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -26,9 +32,9 @@ const LoginPage = () => {
 
       const userFullToken = UserDecodeToken(promise.data.token);
 
-      setUserData(userFullToken)
-      localStorage.setItem("token", JSON.stringify(userFullToken) );
-
+      setUserData(userFullToken);
+      localStorage.setItem("token", JSON.stringify(userFullToken));
+  navigate("/");
 
     } catch (error) {
       //aqui aparece quando da erro
