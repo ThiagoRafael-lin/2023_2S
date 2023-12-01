@@ -10,6 +10,7 @@ import TestPage from "../Pages/TestPage/TestPage";
 
 import Header from "../Components/Header/Header";
 import Footer from "../Components/Footer/Footer";
+import { PrivateRoute } from "./PrivateRoute";
 
 const Rotas = () => {
   return (
@@ -17,8 +18,32 @@ const Rotas = () => {
       <Header />
       <Routes>
         <Route element={<HomePage />} path="/" exact />
-        <Route element={<TipoEventoPage />} path="/tipo-evento" />
-        <Route element={<EventosPage />} path="/eventos" />
+
+        <Route
+          path="/tipo-evento"
+          element={
+            <PrivateRoute redirectTo="/">
+              <TipoEventoPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/eventos"
+          element={
+            <PrivateRoute redirectTo="/">
+              <EventosPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/eventos-alunos"
+          element={
+            <PrivateRoute>
+              <EventosPage />
+            </PrivateRoute>
+          }
+        />
+
         <Route element={<LoginPage />} path="/login" />
         <Route element={<TestPage />} path="/teste-page" />
       </Routes>
