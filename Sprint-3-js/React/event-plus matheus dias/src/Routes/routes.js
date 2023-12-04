@@ -7,6 +7,7 @@ import TipoEventoPage from "../Pages/TipoEventoPage/TipoEventoPage";
 import EventosPage from "../Pages/EventosPage/EventosPage";
 import LoginPage from "../Pages/LoginPage/LoginPage";
 import TestPage from "../Pages/TestPage/TestPage";
+import EventosAlunoPage from "../Pages/EventosAlunoPage/EventosAlunoPage";
 
 import Header from "../Components/Header/Header";
 import Footer from "../Components/Footer/Footer";
@@ -36,10 +37,10 @@ const Rotas = () => {
           }
         />
         <Route
-          path="/eventos-alunos"
+          path="/eventos-aluno"
           element={
             <PrivateRoute>
-              <EventosPage />
+              <EventosAlunoPage />
             </PrivateRoute>
           }
         />
