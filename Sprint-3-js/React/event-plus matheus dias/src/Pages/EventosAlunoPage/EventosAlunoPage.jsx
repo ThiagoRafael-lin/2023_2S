@@ -37,30 +37,68 @@ const EventosAlunoPage = () => {
    async function loadEventsType() {
     
     setShowSpinner(true);
-    
     try {
       if (tipoEvento === "1") {
         const promise = await api.get("/Evento");
-        console.log(promise.data);
+
+        const promiseEventos = await api.get(
+          `/PresencasEvento/ListarMinhas/${userData.useRouteId}`
+          );
+
+          const dadosMarcados = verificarPresenca(promise.data,promiseEventos.data);
+          console.clear();
+          console.log("Dados marcados");
+          console.log(dadosMarcados);
+
         setEventos(promise.data)
       } else {
         let arrEventos = [];
-        const promiseEventos = await api.get(`/PresencasEvento/ListarMinhas${userData.userId}`);
-        promiseEventos.data.forEach((element) => {
-          arrEventos.push( element.evento )
-        });
-        setEventos(arrEventos);
+        const promise = await api.get(
+          `/PresencasEvento/ListarMinhas/${userData.useRouteId}`
+          );
+          promise.data.forEach((e) => {
+            arrEventos.push( {...e.evento, situacao : e.situacao} );
+          });
+          console.log(promise.data);
+          setEventos(arrEventos);
+
+        // let arrEventos = [];
+        // const promiseEventos = await api.get(`/PresencasEvento/ListarMinhas${userData.userId}`);
+        // promiseEventos.data.forEach((element) => {
+        //   arrEventos.push( element.evento )
+        // });
+        // setEventos(arrEventos);
       }
       
     } catch (error) {
-      alert("deu ruim na api")  
+      setNotifyUser({
+        titleNote: "Erro",
+        textNote: `Ocorreu um erro na api!`,
+        imgIcon: "danger",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de sucesso",
+        showMessage: true,
+      });
     }
-    
     
     setShowSpinner(false);
     }
     loadEventsType();
-  }, [tipoEvento]);
+  }, [tipoEvento, userData.useRouteId]);
+
+
+  const verificarPresenca = (arrAllEvents, eventsUser) => {
+    for (let x = 0; x < arrAllEvents.length; x++) {
+      for (let i = 0; i < eventsUser.length; i++) {
+        if(arrAllEvents[x].idEvento === eventsUser[i].idEvento){
+          arrAllEvents[x].situacao = true;
+
+          break;
+        }
+      } 
+    }
+    return arrAllEvents;
+  }
 
   // toggle meus eventos ou todos os eventos
   function myEvents(tpEvent) {
