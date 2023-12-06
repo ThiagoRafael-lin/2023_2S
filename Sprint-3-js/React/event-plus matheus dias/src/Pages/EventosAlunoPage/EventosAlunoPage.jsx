@@ -33,8 +33,11 @@ const EventosAlunoPage = () => {
   const { userData, setUserData } = useContext(UserContext);
 
   useEffect(() => {
-    
-   async function loadEventsType() {
+    loadEventsType();
+  }, [tipoEvento, userData.useRouteId]);
+
+
+  async function loadEventsType() {
     
     setShowSpinner(true);
     try {
@@ -57,7 +60,11 @@ const EventosAlunoPage = () => {
           `/PresencasEvento/ListarMinhas/${userData.useRouteId}`
           );
           promise.data.forEach((e) => {
-            arrEventos.push( {...e.evento, situacao : e.situacao} );
+            arrEventos.push( {
+              ...e.evento, 
+              situacao : e.situacao,
+              idPresencaEvento : e.idPresencaEvento
+            });
           });
           console.log(promise.data);
           setEventos(arrEventos);
@@ -83,16 +90,14 @@ const EventosAlunoPage = () => {
     
     setShowSpinner(false);
     }
-    loadEventsType();
-  }, [tipoEvento, userData.useRouteId]);
 
 
   const verificarPresenca = (arrAllEvents, eventsUser) => {
     for (let x = 0; x < arrAllEvents.length; x++) {
       for (let i = 0; i < eventsUser.length; i++) {
-        if(arrAllEvents[x].idEvento === eventsUser[i].idEvento){
+        if(arrAllEvents[x].idEvento === eventsUser[i].evento.idEvento){
           arrAllEvents[x].situacao = true;
-
+          arrAllEvents[x].idPresencaEvento = eventsUser[i].idPresencaEvento;
           break;
         }
       } 
@@ -106,10 +111,15 @@ const EventosAlunoPage = () => {
   }
 
   async function loadMyComentary(idComentary) {
-    return "????";
+
+    alert("Carregar o comentário")
   }
 
   const showHideModal = () => {
+    setShowModal(showModal ? false : true);
+  };
+  
+  const postMyComentary = () => {
     setShowModal(showModal ? false : true);
   };
 
@@ -117,8 +127,35 @@ const EventosAlunoPage = () => {
     alert("Remover o comentário");
   };
 
-  function handleConnect() {
-    alert("Desenvolver a função conectar evento");
+ async function handleConnect(idEvent, whatTheFunction, idPresencaEvento = null) {
+
+
+    if (whatTheFunction === "connect") {
+      try {
+        const promise = await api.post("/PresencasEvento", 
+        {
+          situacao : true,
+          idUsuario : userData.userId,
+          IdEvento : idEvent
+        })
+
+        loadEventsType();
+
+      } catch (error) {
+        console.log("Error ao conectar");
+        console.log(error);
+      }
+      return;
+    }
+    
+    try {
+      const promiseDelete = await api.delete(`/PresencasEvento/${idPresencaEvento}`);
+      console.log(promiseDelete);
+      loadEventsType();
+    } catch (error) {
+      console.log("Erro ao conectar");
+      console.log(error);
+    }
   }
   return (
     <>
@@ -154,6 +191,8 @@ const EventosAlunoPage = () => {
         <Modal
           userId={userData.userId}
           showHideModal={showHideModal}
+          fnGet={loadMyComentary}
+          fnPost={postMyComentary}
           fnDelete={commentaryRemove}
         />
       ) : null}
