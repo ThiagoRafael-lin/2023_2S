@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using webapi.event_.Domains;
-using webapi.event_.Interfaces;
 using webapi.event_.Repositories;
 
 namespace webapi.event_.Controllers
@@ -9,14 +8,10 @@ namespace webapi.event_.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    public class PresencasEventoController : ControllerBase
-    {
-        private IPresencasEventoRepository _presencasEventoRepository { get; set; }
 
-        public PresencasEventoController()
-        {
-            _presencasEventoRepository = new PresencaRepository();
-        }
+    public class ComentariosEventoController : ControllerBase
+    {
+        ComentariosEventoRepository comentario = new();
 
         [HttpGet]
 
@@ -24,7 +19,22 @@ namespace webapi.event_.Controllers
         {
             try
             {
-                return Ok(_presencasEventoRepository.Listar());
+                return Ok(comentario.Listar());
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("BuscarPorIdUsuario")]
+
+        public IActionResult GetByUserId (Guid IdUsuario, Guid IdEvento)
+        {
+            try
+            {
+                return Ok(comentario.BuscarPorIdUsuario(IdUsuario, IdEvento));
             }
             catch (Exception e)
             {
@@ -35,36 +45,18 @@ namespace webapi.event_.Controllers
 
         [HttpPost]
 
-        public IActionResult Post(PresencasEvento presencasEvento)
+        public IActionResult Post (ComentariosEvento novoComentario)
         {
             try
             {
-                _presencasEventoRepository.Inscrever(presencasEvento);
+                comentario.Cadastrar(novoComentario);
 
-                return StatusCode(201);
+                return StatusCode(201, novoComentario);
             }
             catch (Exception e)
             {
 
                 return BadRequest(e.Message);
-            }
-        }
-
-        [HttpGet("ListarMinhas/{id}")]
-
-        public IActionResult GetMyList(Guid id)
-        {
-            try
-            {
-
-                return Ok(_presencasEventoRepository.ListarMinhas(id));
-
-            }
-            catch (Exception e)
-            {
-
-                return BadRequest(e.Message);
-
             }
         }
 
@@ -72,19 +64,18 @@ namespace webapi.event_.Controllers
 
         public IActionResult Delete(Guid id)
         {
-            try 
+            try
             {
-                _presencasEventoRepository.Deletar(id);
+                comentario.Deletar(id);
 
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                return BadRequest(e.Message);
             }
         }
 
     }
 }
-

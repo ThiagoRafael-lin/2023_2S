@@ -23,7 +23,8 @@ const EventosAlunoPage = () => {
   ]);
 
   const [notifyUser, setNotifyUser] = useState({});
-
+  const [descricaoComentario, setDescricaoComentario] = useState ("")
+  const [exibe, setExibe] = useState("");
 
   const [tipoEvento, setTipoEvento] = useState("1"); //código do tipo do Evento escolhido
   const [showSpinner, setShowSpinner] = useState(false);
@@ -110,9 +111,18 @@ const EventosAlunoPage = () => {
     setTipoEvento(tpEvent);
   }
 
-  async function loadMyComentary(idComentary) {
+  async function loadMyComentary() {
 
-    alert("Carregar o comentário")
+    // try {
+    //   const promise = await api.get(`/ComentariosEvento/BuscarPorIdUsuario`, {
+        
+        
+    //   })
+    //   console.log(promise.data);
+    // } catch (error) {
+      
+    // }
+    // alert("Carregar o comentário")
   }
 
   const showHideModal = () => {
@@ -120,42 +130,63 @@ const EventosAlunoPage = () => {
   };
   
   const postMyComentary = () => {
-    setShowModal(showModal ? false : true);
+
+    try {
+
+      const retorno = api.post(`/ComentariosEvento`, {
+
+        descricao : descricaoComentario,
+        exibe : exibe,
+
+      })
+      console.log(retorno.data);
+      
+    } catch (error) {
+    alert("erro ao cadastrar") ;     
+    }
+
+
+    // setShowModal(showModal ? false : true);
   };
 
   const commentaryRemove = () => {
     alert("Remover o comentário");
   };
 
- async function handleConnect(idEvent, whatTheFunction, idPresencaEvento = null) {
+ async function handleConnect(idEvent, idPresencaEvento,  whatTheFunction = false) {
 
-
-    if (whatTheFunction === "connect") {
+    if (whatTheFunction === true) {
       try {
-        const promise = await api.post("/PresencasEvento", 
+       await api.post("/PresencasEvento", 
         {
           situacao : true,
-          idUsuario : userData.userId,
-          IdEvento : idEvent
-        })
+          idUsuario : userData.useRouteId,
+          IdEvento : idEvent,
+        });
 
         loadEventsType();
 
       } catch (error) {
         console.log("Error ao conectar");
-        console.log(error);
       }
       return;
     }
     
+
     try {
-      const promiseDelete = await api.delete(`/PresencasEvento/${idPresencaEvento}`);
-      console.log(promiseDelete);
+      await api.delete(`/PresencasEvento/${idPresencaEvento}`);
       loadEventsType();
     } catch (error) {
-      console.log("Erro ao conectar");
-      console.log(error);
+      console.log("Erro ao Desconectar" + error);
     }
+    // try {
+    //   const promiseDelete = await api.delete(`/PresencasEvento/${idPresencaEvento}`);
+    //   console.log(promiseDelete);
+    //   loadEventsType();
+    // } catch (error) {
+    //   console.log("Erro ao conectar");
+    //   console.log(error);
+    // }
   }
   return (
     <>
@@ -189,7 +220,7 @@ const EventosAlunoPage = () => {
 
       {showModal ? (
         <Modal
-          userId={userData.userId}
+          userId={userData.useRouteId}
           showHideModal={showHideModal}
           fnGet={loadMyComentary}
           fnPost={postMyComentary}

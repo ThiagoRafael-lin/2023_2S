@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import trashDelete from "../../Assets/images/trash-delete-red.png";
 
 import { Button, Input } from "../FormComponents/FormComponents";
@@ -14,6 +14,12 @@ const Modal = ({
   fnDelete = null,
 
 }) => {
+
+  useEffect (() => {
+
+    fnGet();
+
+  }, [])
 
   return (
     <div className="modal">

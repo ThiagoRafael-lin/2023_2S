@@ -1,4 +1,5 @@
 ﻿using webapi.event_.Contexts;
+using webapi.event_.Controllers;
 using webapi.event_.Domains;
 using webapi.event_.Interfaces;
 
@@ -41,11 +42,42 @@ namespace webapi.event_.Repositories
             }
         }
 
+        public ComentariosEvento BuscarPorIdUsuario(Guid IdUsuario, Guid IdEvento)
+        {
+            try
+            {
+                return _context.ComentariosEvento
+                    .Select(c => new ComentariosEvento
+                    {
+                        Descricao = c.Descricao,
+                        Exibe = c.Exibe,
+                        IdUsuario = c.IdUsuario,
+                        IdComentarioEvento = c.IdComentarioEvento,
+                        IdEvento = c.IdEvento,
+
+                        Usuario = new Usuario
+                        {
+                            Nome = c.Usuario!.Nome
+                        },
+
+                        Evento = new Evento
+                        {
+                            NomeEvento = c.Evento!.NomeEvento,
+                        }
+
+                    }).FirstOrDefault(c => c.IdUsuario == IdUsuario && c.IdEvento == IdEvento)!;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public void Cadastrar(ComentariosEvento comentarioEvento)
         {
             try
             {
                 _context.ComentariosEvento.Add(comentarioEvento);
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -82,6 +114,9 @@ namespace webapi.event_.Repositories
                     {
                         Descricao = c.Descricao,
                         Exibe = c.Exibe,
+                        IdUsuario = c.IdUsuario,
+                        IdComentarioEvento = c.IdComentarioEvento,
+                        IdEvento = c.IdEvento,
 
                         Usuario = new Usuario
                         {
@@ -100,6 +135,16 @@ namespace webapi.event_.Repositories
 
                 throw;
             }
+        }
+
+        internal object? BuscarPorIdUsuario(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void Cadastrar(ComentariosEventoController novoComentario)
+        {
+            throw new NotImplementedException();
         }
     }
 }
