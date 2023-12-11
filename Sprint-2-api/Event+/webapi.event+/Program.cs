@@ -1,7 +1,9 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Azure.CognitiveServices.ContentModerator;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -114,6 +116,17 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
         });
 });
+
+//Habilita o serviço de moderador de conteúdo do Azure
+
+builder.Services.AddSingleton(provider => new ContentModeratorClient(
+    new ApiKeyServiceClientCredentials("")//Key da Azure
+    {
+        //EndPoint = "" //EndPoint Da Azure
+    }
+    ) );
+
+
 
 var app = builder.Build();
 
