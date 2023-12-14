@@ -1303,3 +1303,6 @@ E:\OneDrive\Área de Trabalho\2023_2S\Sprint-2-api\Event+\webapi.event+\obj\Debu
 C:\Users\47195701867\Desktop\2023_2S\Sprint-2-api\Event+\webapi.event+\bin\Debug\net7.0\Microsoft.Azure.CognitiveServices.ContentModerator.dll
 C:\Users\47195701867\Desktop\2023_2S\Sprint-2-api\Event+\webapi.event+\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.dll
 C:\Users\47195701867\Desktop\2023_2S\Sprint-2-api\Event+\webapi.event+\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.Azure.dll
+E:\OneDrive\Área de Trabalho\2023_2S\Sprint-2-api\Event+\webapi.event+\bin\Debug\net7.0\Microsoft.Azure.CognitiveServices.ContentModerator.dll
+E:\OneDrive\Área de Trabalho\2023_2S\Sprint-2-api\Event+\webapi.event+\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.dll
+E:\OneDrive\Área de Trabalho\2023_2S\Sprint-2-api\Event+\webapi.event+\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.Azure.dll
