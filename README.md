@@ -1,2 +1,2 @@
 # 2023_2S
-Códigos feito no Senai e em casa
+Esse repositório foi criado para projetos do 2 semestre, feitos no Senai
